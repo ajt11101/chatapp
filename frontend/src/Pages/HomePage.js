@@ -16,7 +16,7 @@ const HomePage = () => {
         d="flex"
       >
         <Text d="flex" fontSize="4xl" fontFamily="Work Sans" textAlign="center">
-          Chit-Chat
+          Chat-Now
         </Text>
       </Box>
       <Box
