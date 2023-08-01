@@ -1,25 +1,33 @@
-import React,{useState} from 'react'
-import {Box, Text} from "@chakra-ui/layout"
-import { Avatar, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tooltip } from '@chakra-ui/react'
-import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { ChatState } from '../../Context/ChatProvider'
-import ProfileModal from './ProfileModal'
-import {useHistory} from 'react-router-dom'
+import React, { useState } from "react";
+import { Box, Text } from "@chakra-ui/layout";
+import {
+  Avatar,
+  Button,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from "@chakra-ui/react";
+import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { ChatState } from "../../Context/ChatProvider";
+import ProfileModal from "./ProfileModal";
+import { useHistory } from "react-router-dom";
 const SideDrawer = () => {
-   const [search, setSearch] = useState("")
-   const [searchResult, setSearchResult] = useState([])
-   const [loading, setLoading] = useState(false)
-   const [loadingChat, setLoadingChat] = useState()
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingChat, setLoadingChat] = useState();
 
-   const { user }=ChatState()
+  const { user } = ChatState();
 
+  const history = useHistory();
 
-   const history = useHistory();
-
-   const logOutHandler = () => {
-     localStorage.removeItem("userInfo");
-     history.push("/");
-   };
+  const logOutHandler = () => {
+    localStorage.removeItem("userInfo");
+    history.push("/");
+  };
   return (
     <>
       <Box
@@ -71,6 +79,6 @@ const SideDrawer = () => {
       </Box>
     </>
   );
-}
+};
 
-export default SideDrawer
+export default SideDrawer;
