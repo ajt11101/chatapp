@@ -51,7 +51,6 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
-
 //@description     Fetch all chats for a user
 //@route           GET /api/chat/
 //@access          Protected
@@ -74,7 +73,6 @@ const fetchChats = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
-
 
 //@description     Create New Group Chat
 //@route           POST /api/chat/group
@@ -113,7 +111,6 @@ const createGroupChat = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    Rename Group
 // @route   PUT /api/chat/rename
 // @access  Protected
@@ -139,7 +136,6 @@ const renameGroup = asyncHandler(async (req, res) => {
     res.json(updatedChat);
   }
 });
-
 
 // @desc    Add user to Group / Leave
 // @route   PUT /api/chat/groupadd
@@ -169,7 +165,6 @@ const addToGroup = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    Remove user from Group
 // @route   PUT /api/chat/groupremove
 // @access  Protected
@@ -198,5 +193,11 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   }
 });
 
-
-module.exports={accessChat,fetchChats,createGroupChat,renameGroup,addToGroup,removeFromGroup}
+module.exports = {
+  accessChat,
+  fetchChats,
+  createGroupChat,
+  renameGroup,
+  addToGroup,
+  removeFromGroup,
+};
