@@ -21,12 +21,16 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     const {
       selectedChat,
       setSelectedChat,
-      user
+      user,
+      notification,
+      setNotification
     } = ChatState();
  const [messages, setMessages] = useState([]);
  const [loading, setLoading] = useState(false);
  const [newMessage, setNewMessage] = useState("");
  const [socketConnected, setSocketConnected] = useState(false)
+ const [typing, setTyping] = useState(false)
+ const [isTyping, setIsTyping] = useState(false)
 //  const [notification, setNotification] = useState()
  const toast=useToast();
 
@@ -62,6 +66,15 @@ const fetchMessages=async()=>{
        });
      }
 }
+ useEffect(() => {
+   socket = io(ENDPOINT);
+   socket.emit("setup", user);
+   socket.on("connected", () => setSocketConnected(true));
+   socket.on("typing", () => setIsTyping(true));
+   socket.on("stop typing", () => setIsTyping(false));
+
+   // eslint-disable-next-line
+ }, []);
 
   useEffect(() => {
     fetchMessages();
@@ -70,24 +83,27 @@ const fetchMessages=async()=>{
     // eslint-disable-next-line
   }, [selectedChat]);
 
-//   useEffect(() => {
-//     socket.on("message recieved", (newMessageRecieved) => {
-//       if (
-//         !selectedChatCompare || // if chat is not selected or doesn't match current chat
-//         selectedChatCompare._id !== newMessageRecieved.chat._id
-//       ) {
-//         if (!notification.includes(newMessageRecieved)) {
-//           setNotification([newMessageRecieved, ...notification]);
-//           setFetchAgain(!fetchAgain);
-//         }
-//       } else {
-//         setMessages([...messages, newMessageRecieved]);
-//       }
-//     });
-//   });
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
+
 
  const sendMessage=async(event)=>{
     if(event.key==="Enter"&&newMessage){
+        socket.emit("stop typing", selectedChat._id);
         try {
              const config = {
                headers: {
@@ -104,7 +120,7 @@ const fetchMessages=async()=>{
                },
                config
              );
-            //  socket.emit("new message", data);
+             socket.emit("new message", data);
 
             console.log(data);
              setMessages([...messages, data]);
@@ -123,20 +139,24 @@ const fetchMessages=async()=>{
  }
 
 
-
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", user);
-    socket.on("connected", () => setSocketConnected(true));
-    // socket.on("typing", () => setIsTyping(true));
-    // socket.on("stop typing", () => setIsTyping(false));
-
-    // eslint-disable-next-line
-  }, []);
-
-
  const typingHandler = (e)=>{
     setNewMessage(e.target.value);
+     if (!socketConnected) return;
+
+     if (!typing) {
+       setTyping(true);
+       socket.emit("typing", selectedChat._id);
+     }
+     let lastTypingTime = new Date().getTime();
+     var timerLength = 2000;
+     setTimeout(() => {
+       var timeNow = new Date().getTime();
+       var timeDiff = timeNow - lastTypingTime;
+       if (timeDiff >= timerLength && typing) {
+         socket.emit("stop typing", selectedChat._id);
+         setTyping(false);
+       }
+     }, timerLength);
  }
   return (
     <>
@@ -193,11 +213,18 @@ const fetchMessages=async()=>{
                 margin="auto"
               />
             ) : (
-              <div className='messages'>
-                <ScrollableChat messages={messages}/>
+              <div className="messages">
+                <ScrollableChat messages={messages} />
               </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              {isTyping ? (
+                <div>
+                  Typing...
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
