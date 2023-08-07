@@ -1,7 +1,7 @@
 import React from 'react'
 import { ChatState } from "../Context/ChatProvider";
 import { Box, Text } from "@chakra-ui/layout";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { FormControl, IconButton, Input, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -18,6 +18,17 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
       setSelectedChat,
       user
     } = ChatState();
+ const [messages, setMessages] = useState([]);
+ const [loading, setLoading] = useState(false);
+ const [newMessage, setNewMessage] = useState("");
+
+
+
+ const sendMessage=()=>{
+
+ }
+
+ const typingHandler = ()=>{}
   return (
     <>
       {selectedChat ? (
@@ -46,10 +57,10 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
               <>
                 {selectedChat.chatName.toUpperCase()}
                 <UpdateGroupChatModal
-                    // fetchMessages={fetchMessages}
-                    fetchAgain={fetchAgain}
-                    setFetchAgain={setFetchAgain}
-                  />
+                  // fetchMessages={fetchMessages}
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                />
               </>
             )}
           </Text>
@@ -64,7 +75,26 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
             borderRadius="lg"
             overflowY="hidden"
           >
-            Messages Here
+            {loading ? (
+              <Spinner
+                size="xl"
+                w={20}
+                h={20}
+                alignSelf="center"
+                margin="auto"
+              />
+            ) : (
+              <div></div>
+            )}
+            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              <Input
+                variant="filled"
+                bg="#E0E0E0"
+                placeholder="Enter a message.."
+                onChange={typingHandler}
+                value={newMessage}
+              />
+            </FormControl>
           </Box>
         </>
       ) : (
