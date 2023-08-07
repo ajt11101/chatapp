@@ -17,18 +17,17 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/input"
+import { Input } from "@chakra-ui/input";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useHistory } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/hooks";
-import axios from "axios"
+import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 import { getSender } from "../../config/ChatLogics";
-import NotificationBadge,{ Effect } from "react-notification-badge"
-
+import NotificationBadge, { Effect } from "react-notification-badge";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -36,7 +35,14 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
-  const { user,setSelectedChat,chats,setChats,notification,setNotification} = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = ChatState();
 
   const history = useHistory();
 
@@ -86,7 +92,6 @@ const SideDrawer = () => {
     }
   };
 
-
   //function to access chats on performing search operation
   const accessChat = async (userId) => {
     console.log(userId);
@@ -117,8 +122,6 @@ const SideDrawer = () => {
     }
   };
 
-
-
   return (
     <>
       <Box
@@ -146,8 +149,8 @@ const SideDrawer = () => {
           <Menu>
             <MenuButton p={1}>
               <NotificationBadge
-              count={notification.length}
-              effect={Effect.SCALE}
+                count={notification.length}
+                effect={Effect.SCALE}
               />
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
