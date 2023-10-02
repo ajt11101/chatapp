@@ -1,4 +1,5 @@
 const express = require("express");
+const { createServer } = require("http");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
@@ -10,7 +11,7 @@ dotenv.config();
 connectDB();
 const app = express();
 app.use(cors());
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT||5000;
 
 
 app.use(express.json())
@@ -26,11 +27,12 @@ app.use("/api/message",messageRoutes)
 //This is for handling errors
 app.use(notFound)
 app.use(errorHandler)
-const server=app.listen(port, () => {
-  console.log(`listening on port${port}`);
+const server=app.listen(PORT, () => {
+  console.log(`listening on port${PORT}`);
 });
 
 
+//setting up the socket 
 const io=require('socket.io')(
   server,{
     pingTimeout:60000,
@@ -40,14 +42,14 @@ const io=require('socket.io')(
   }
 )
 
+//this takes the name of the socket and the call back function
 io.on("connection",(socket)=>{
   console.log("connected to socket.io");
+  //this function creates a room for chat
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
   });
-
-
 
   socket.on("join chat", (room) => {
     socket.join(room);

@@ -66,6 +66,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       });
     }
   };
+
+  //for starting the web server
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
@@ -76,6 +78,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     // eslint-disable-next-line
   }, []);
 
+  
   useEffect(() => {
     fetchMessages();
 
