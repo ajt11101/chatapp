@@ -14,7 +14,7 @@ app.use(cors());
 const PORT = process.env.PORT||5000;
 
 
-app.use(express.json())
+app.use(express.json())//to accept json data
 
 app.get("/", (req, res) => {
   res.send("Api is working");
