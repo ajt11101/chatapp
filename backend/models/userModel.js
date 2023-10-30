@@ -17,9 +17,8 @@ const userSchema = mongoose.Schema(
       default: false,
     },
   },
-  { timestaps: true }
+  { timestamps: true }
 );
-
 
 //This is the function to check the entered password and the original password.
 userSchema.methods.matchPassword = async function (enteredPassword) {
