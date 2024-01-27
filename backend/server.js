@@ -11,7 +11,7 @@ dotenv.config();
 connectDB();
 const app = express();
 app.use(cors());
-const PORT = process.env.PORT||5000;
+const PORT = process.env.PORT;
 
 
 app.use(express.json())//to accept json data
